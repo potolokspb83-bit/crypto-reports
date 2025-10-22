@@ -12,8 +12,8 @@ export default async function sitemap() {
     .select('query, generated_at')
     .order('generated_at', { ascending: false });
 
-  // Генерируем URL (замени baseUrl на твой домен, когда деплоишь)
-  const baseUrl = 'http://localhost:3000';  // Для теста; на Vercel — https://твой-сайт.vercel.app
+  // Генерируем URL (авто для Netlify/локально)
+  const baseUrl = process.env.VERCEL_URL || 'http://localhost:3000';
   const sitemapEntries = reports?.map((report) => ({
     url: `${baseUrl}/report?q=${encodeURIComponent(report.query)}`,
     lastModified: new Date(report.generated_at),
@@ -30,4 +30,4 @@ export default async function sitemap() {
     },
     ...sitemapEntries,
   ];
-}
+}Ы
