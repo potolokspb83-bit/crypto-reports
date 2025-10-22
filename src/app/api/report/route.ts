@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
-export const dynamic = 'force-dynamic';  // Добавили: API динамический, не статический
+export const dynamic = 'force-dynamic';  // API динамический
 
 // Секреты из .env.local
 const supabaseUrl = process.env.SUPABASE_URL!;
@@ -36,8 +36,10 @@ export async function GET(request: NextRequest) {
       const response = await fetch('https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC&tsyms=USD');
       if (response.ok) {
         const apiData = await response.json();
-        price = apiData.RAW.BTC.USD.PRICE || 0;
-        change = apiData.RAW.BTC.USD.CHANGEPCT24HOUR || 0;
+        if (apiData.RAW && apiData.RAW.BTC) {  // Проверка на undefined
+          price = apiData.RAW.BTC.USD.PRICE || 0;
+          change = apiData.RAW.BTC.USD.CHANGEPCT24HOUR || 0;
+        }
       }
     } catch (fetchError) {
       console.error('CryptoCompare fetch error:', fetchError);
@@ -59,7 +61,9 @@ export async function GET(request: NextRequest) {
       });
       if (tokenResponse.ok) {
         const tokenData = await tokenResponse.json();
-        accessToken = tokenData.access_token || '';
+        if (tokenData.access_token) {  // Проверка на undefined
+          accessToken = tokenData.access_token;
+        }
       }
     } catch (tokenError) {
       console.error('Token fetch error:', tokenError);
@@ -86,7 +90,9 @@ export async function GET(request: NextRequest) {
         });
         if (aiResponse.ok) {
           const aiData = await aiResponse.json();
-          analysis = aiData.choices[0]?.message?.content || 'Анализ недоступен';
+          if (aiData.choices && aiData.choices[0]) {  // Проверка на undefined
+            analysis = aiData.choices[0].message.content || 'Анализ недоступен';
+          }
         }
       } catch (aiError) {
         console.error('GigaChat fetch error:', aiError);
