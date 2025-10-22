@@ -30,4 +30,4 @@ export default async function sitemap() {
     },
     ...sitemapEntries,
   ];
-}Ы
+}
