@@ -8,8 +8,8 @@ export default async function ReportPage({ searchParams }: Props) {
   const { q } = searchParams;
   if (!q) return notFound();
 
-  // Fetch к относительному URL (работает локально и на Netlify)
-  const res = await fetch(`${process.env.VERCEL_URL || 'http://localhost:3000'}/api/report?q=${encodeURIComponent(q)}`);
+  // Fetch к относительному URL (работает на Netlify и локально)
+  const res = await fetch(`/api/report?q=${encodeURIComponent(q)}`);
   const { html, error } = await res.json();
 
   if (error) return <p style={{ background: 'black', color: 'white', padding: '20px' }}>Ошибка: {error}</p>;
