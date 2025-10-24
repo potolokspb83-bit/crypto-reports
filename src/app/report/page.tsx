@@ -8,8 +8,9 @@ export default async function ReportPage({ searchParams }: Props) {
   const { q } = searchParams;
   if (!q) return notFound();
 
-  // Fetch к относительному URL (работает на Netlify и локально)
-  const res = await fetch(`/api/report?q=${encodeURIComponent(q)}`);
+  // Fetch с полным URL (авто для Netlify/локально)
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const res = await fetch(`${baseUrl}/api/report?q=${encodeURIComponent(q)}`);
   const { html, error } = await res.json();
 
   if (error) return <p style={{ background: 'black', color: 'white', padding: '20px' }}>Ошибка: {error}</p>;
