@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Crypto Reports',
   description: 'Самонаполняющийся сайт с отчётами по криптовалютам',
   verification: {
-    google: <meta name="google-site-verification" content="6jqfac7yPFEms07QvwfwU9i1889NiqaSqwzjSNwous0" />  // Замени на свой код от Google
+    google: '6jqfac7yPFEms07QvwfwU9i1889NiqaSqwzjSNwous0'  // Только content (твой код от Google)
   }
 };
 
