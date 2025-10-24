@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
-export const dynamic = 'force-dynamic';  // Ключевой фикс для build
+export const dynamic = 'force-dynamic';
 
 // Секреты из .env.local
 const supabaseUrl = process.env.SUPABASE_URL!;
