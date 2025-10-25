@@ -7,24 +7,31 @@
     font-family: system-ui, sans-serif;
   }
   body {
-    @apply bg-black text-white;
+    background: black;
+    color: white;
   }
   h1, h2, h3 {
-    @apply text-orange-400;  /* Оранжевый для заголовков (крипто-тема) */
+    color: #FF9900;  /* Оранжевый для заголовков */
   }
   p {
-    @apply text-gray-300;  /* Светло-серый для текста */
+    color: #D1D5DB;  /* Светло-серый для текста */
   }
   canvas {
-    @apply border-gray-600;  /* Границы графика */
+    border: 1px solid #4B5563;  /* Границы графика */
   }
 }
 
 @layer components {
   .container {
-    @apply max-w-4xl mx-auto px-4 py-8;
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 1rem;
   }
   .card {
-    @apply bg-gray-900 border border-gray-600 rounded-lg p-6 shadow-lg;
+    background: #111827;
+    border: 1px solid #4B5563;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   }
 }
