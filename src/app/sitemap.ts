@@ -1,20 +1,17 @@
 import { createClient } from '@supabase/supabase-js';
 
-export const dynamic = 'force-dynamic';  // Динамический для runtime
+export const dynamic = 'force-dynamic';
 
-// Секреты из .env.local
 const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default async function sitemap() {
-  // Тянем все отчёты из Supabase
   const { data: reports } = await supabase
     .from('reports')
     .select('query, generated_at')
     .order('generated_at', { ascending: false });
 
-  // Генерируем URL (авто для Netlify/локально)
   const baseUrl = process.env.NETLIFY_SITE_URL || 'http://localhost:3000';
   const sitemapEntries = reports?.map((report) => ({
     url: `${baseUrl}/report?q=${encodeURIComponent(report.query)}`,
