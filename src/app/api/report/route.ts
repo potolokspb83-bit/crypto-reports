@@ -39,6 +39,19 @@ export async function GET(request: NextRequest) {
         if (apiData.RAW && apiData.RAW.BTC) {
           price = apiData.RAW.BTC.USD.PRICE || 0;
           change = apiData.RAW.BTC.USD.CHANGEPCT24HOUR || 0;
+          // Историческая динамика (7 дней)
+let historicalData = [];
+try {
+  const histResponse = await fetch('https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=7');
+  if (histResponse.ok) {
+    const histApiData = await histResponse.json();
+    if (histApiData.Data && histApiData.Data.length > 0) {
+      historicalData = histApiData.Data.map((day: any) => day.close);  // Массив цен за 7 дней (close — цена закрытия)
+    }
+  }
+} catch (histError) {
+  console.error('Historical fetch error:', histError);
+}
         }
       }
     } catch (fetchError) {
@@ -110,6 +123,47 @@ export async function GET(request: NextRequest) {
           <p>${analysis}</p>
         </div>
         <p>Обновлено: ${new Date().toLocaleString('ru-RU')}</p>
+        <!-- График исторической динамики (7 дней) -->
+<section class="py-8">
+  <h3 style="color: #FF9900; margin-bottom: 10px;">Историческая динамика (7 дней)</h3>
+  <canvas id="histChart" width="400" height="200" style="max-width: 100%; border: 1px solid #ccc; margin: 10px 0; background: black;"></canvas>
+  <script>
+    const histCtx = document.getElementById('histChart').getContext('2d');
+    new Chart(histCtx, {
+      type: 'line',
+      data: {
+        labels: ['День -7', 'День -6', 'День -5', 'День -4', 'День -3', 'День -2', 'Сегодня'],
+        datasets: [{
+          label: 'Цена BTC (USD)',
+          data: [${historicalData.join(',')}],
+          borderColor: '#FF9900',
+          backgroundColor: 'rgba(255, 153, 0, 0.2)',
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { labels: { color: '#fff' } }
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            title: { display: true, text: 'Цена (USD)', color: '#fff' },
+            ticks: { color: '#fff' },
+            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+          },
+          x: {
+            title: { display: true, text: 'Дата', color: '#fff' },
+            ticks: { color: '#fff' },
+            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+          }
+        },
+        backgroundColor: 'black'
+      }
+    });
+  </script>
+</section>
         <!-- График цены (чёрный фон) -->
         <canvas id="priceChart" width="400" height="200" style="max-width: 100%; border: 1px solid #ccc; margin: 10px 0; background: black;"></canvas>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
